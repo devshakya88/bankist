@@ -65,7 +65,7 @@ const displayMovements = function (movements) {
     const type = mov > 0 ? "deposit" : "withdrawal";
     const html = `
     <div class="movements__row">
-    <div class="movements__type movements__type--${type}">${i + 1}</div>
+    <div class="movements__type movements__type--${type}">${i + 1} ${type}</div>
     <div class="movements__value">${mov}€</div>
   </div>`;
     containerMovements.insertAdjacentHTML("afterbegin", html);
@@ -95,7 +95,7 @@ const calDisplaySummary = function (movements) {
     .map((deposit) => (deposit * 1.2) / 100)
     .filter((int, i, arr) => {
       console.log(arr);
-      return;
+      return int >= 1;
     })
     .reduce((acc, int) => acc + int, 0);
 
