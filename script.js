@@ -123,7 +123,7 @@ btnLogin.addEventListener("click", function (e) {
   currentAccount = accounts.find(
     (acc) => acc.username === inputLoginUsername.value
   );
-  console.log(currentAccount);
+  // console.log(currentAccount);
 
   if (currentAccount?.pin === Number(inputLoginPin.value)) {
     //Display UI and message
@@ -143,7 +143,7 @@ btnLogin.addEventListener("click", function (e) {
     calDisplayBalance(currentAccount.movements);
     //Display Summary
     calDisplaySummary(currentAccount);
-    console.log("Login");
+    // console.log("Login");
   }
 });
 
@@ -155,5 +155,4 @@ btnTransfer.addEventListener("click", function (e) {
   );
 
   console.log(amount, receiverAcc);
-  if()
 });
