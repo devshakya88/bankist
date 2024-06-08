@@ -72,12 +72,13 @@ const displayMovements = function (movements) {
   });
 };
 
-const calDisplayBalance = function (movements) {
-  const balance = movements.reduce((acc, mov) => acc + mov, 0);
-  labelBalance.textContent = `${balance} €`;
+const calDisplayBalance = function (acc) {
+  acc.balance = acc.movements.reduce((acc, mov) => acc + mov, 0);
+  labelBalance.textContent = `${acc.balance}€`;
 };
 
 // console.log(calDisplayBalance(account1.movements));
+
 const calDisplaySummary = function (acc) {
   const incomes = acc.movements
     .filter((mov) => mov > 0)
@@ -93,7 +94,7 @@ const calDisplaySummary = function (acc) {
     .filter((mov) => mov > 0)
     .map((deposit) => (deposit * acc.interestRate) / 100)
     .filter((int, i, arr) => {
-      console.log(arr);
+      // console.log(arr);
       return int >= 1;
     })
     .reduce((acc, int) => acc + int, 0);
@@ -112,6 +113,16 @@ const createUsernames = function (accs) {
 };
 createUsernames(accounts);
 
+const updateUI = function (acc) {
+  //Display Movements
+  displayMovements(acc.movements);
+  //Display balance
+  calDisplayBalance(acc);
+  //Display Summary
+  calDisplaySummary(acc);
+  // console.log("Login");
+};
+
 //Event handler
 
 let currentAccount;
@@ -123,7 +134,7 @@ btnLogin.addEventListener("click", function (e) {
   currentAccount = accounts.find(
     (acc) => acc.username === inputLoginUsername.value
   );
-  // console.log(currentAccount);
+  console.log(currentAccount);
 
   if (currentAccount?.pin === Number(inputLoginPin.value)) {
     //Display UI and message
@@ -137,13 +148,9 @@ btnLogin.addEventListener("click", function (e) {
     //Clear Input Field
     inputLoginUsername.value = inputLoginPin.value = "";
     inputLoginPin.blur();
-    //Display Movements
-    displayMovements(currentAccount.movements);
-    //Display balance
-    calDisplayBalance(currentAccount.movements);
-    //Display Summary
-    calDisplaySummary(currentAccount);
-    // console.log("Login");
+
+    //Updated UI
+    updateUI(currentAccount);
   }
 });
 
@@ -154,5 +161,34 @@ btnTransfer.addEventListener("click", function (e) {
     (acc) => acc.username === inputTransferTo.value
   );
 
-  console.log(amount, receiverAcc);
+  inputTransferAmount.value = inputTransferTo.value = "";
+  if (
+    amount > 0 &&
+    currentAccount.balance >= amount &&
+    receiverAcc?.username !== currentAccount.username
+  ) {
+    currentAccount.movements.push(-amount);
+    receiverAcc.movements.push(amount);
+    inputTransferAmount.blur();
+    updateUI(currentAccount);
+  }
+});
+
+btnClose.addEventListener("click", function (e) {
+  e.preventDefault();
+  console.log("Delete");
+
+  if (
+    inputCloseUsername.value === currentAccount.username &&
+    Number(inputClosePin.value) === currentAccount.pin
+  ) {
+    const index = accounts.findIndex(
+      (acc) => acc.username === currentAccount.username
+    );
+    accounts.splice(index, 1);
+    console.log(index);
+    containerApp.style.opacity = 0;
+    console.log(accounts);
+  }
+  inputCloseUsername.value = inputClosePin.value = "";
 });
