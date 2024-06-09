@@ -174,9 +174,27 @@ btnTransfer.addEventListener("click", function (e) {
   }
 });
 
+btnLoan.addEventListener("click", function (e) {
+  e.preventDefault();
+  const amount = Number(inputLoanAmount.value);
+
+  if (
+    amount > 0 &&
+    currentAccount.movements.some((mov) => mov >= amount * 0.1)
+  ) {
+    //Add Movememt
+    currentAccount.movements.push(amount);
+
+    //Update UI
+    updateUI(currentAccount);
+  }
+  inputLoanAmount.value = "";
+  console.log("Amount Transfer - " + amount);
+});
+
 btnClose.addEventListener("click", function (e) {
   e.preventDefault();
-  console.log("Delete");
+  // console.log("Delete");
 
   if (
     inputCloseUsername.value === currentAccount.username &&
