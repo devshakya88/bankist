@@ -103,7 +103,7 @@ const formatMovementsDate = function (date) {
     Math.round(Math.abs(date2 - date1) / (1000 * 60 * 60 * 24));
 
   const daysPassed = calcDaysPassed(new Date(), date);
-  console.log(daysPassed);
+  // console.log(daysPassed);
   if (daysPassed === 0) {
     return "Today";
   }
@@ -211,15 +211,6 @@ containerApp.style.opacity = 100;
 
 //Experiemnting API
 const now1 = new Date();
-const options = {
-  hour: "numeric",
-  minute: "numeric",
-  day: "numeric",
-  month: "long",
-  year: "numerc",
-  weekday: "long",
-};
-labelDate.textContent = new Intl.DateTimeFormat("en-GB", options).format(now);
 
 btnLogin.addEventListener("click", function (e) {
   // Prevent Form from submitting
@@ -280,14 +271,17 @@ btnLoan.addEventListener("click", function (e) {
     amount > 0 &&
     currentAccount.movements.some((mov) => mov >= amount * 0.1)
   ) {
-    // Add movement
-    currentAccount.movements.push(amount);
+    setTimeout(() => {
+      // Add movement
+      currentAccount.movements.push(amount);
 
-    // Add loan date
-    currentAccount.movementsDates.push(new Date().toISOString());
+      // Add loan date
+      currentAccount.movementsDates.push(new Date().toISOString());
 
-    // Update UI
-    updateUI(currentAccount);
+      // Update UI
+      updateUI(currentAccount);
+      console.log(`${amount} amount Loan Dibursed`);
+    }, 2000);
   }
   inputLoanAmount.value = "";
 });
